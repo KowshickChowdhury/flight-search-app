@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoIosRemove, IoMdAdd } from "react-icons/io";
 
-function SearchForm() {
+function SearchForm({ onSearch }) {
   const [departureAirport, setDepartureAirport] = useState("");
   const [destinationAirport, setDestinationAirport] = useState("");
   const [departureDate, setDepartureDate] = useState("");
@@ -11,7 +11,17 @@ function SearchForm() {
   ]);
   const passengerOptions = ["ADT", "CHILD", "KIDS"];
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const searchData = {
+      departureAirport,
+      destinationAirport,
+      departureDate,
+      returnDate,
+      passengerTypes,
+    };
+    onSearch(searchData);
+  };
 
   const handlePassengerTypeChange = (index, value) => {
     const updatePassengerTypes = [...passengerTypes];
@@ -30,7 +40,10 @@ function SearchForm() {
   };
 
   const handleRemovePassengerType = (index) => {
-    const updatePassengerTypes = [...passengerTypes.slice(0, index), ...passengerTypes.slice(index + 1)];
+    const updatePassengerTypes = [
+      ...passengerTypes.slice(0, index),
+      ...passengerTypes.slice(index + 1),
+    ];
     setPassengerTypes(updatePassengerTypes);
   };
 
@@ -38,9 +51,12 @@ function SearchForm() {
 
   return (
     <>
-      <form className="max-w-[71rem] mx-auto mt-8" onSubmit={handleSubmit}>
-        <div className="flex gap-4 justify-between items-center">
-          <div>
+      <form
+        className="max-w-[71rem] mx-auto mt-8 border-b border-[#adabfb] pb-2 drop-shadow"
+        onSubmit={handleSubmit}
+      >
+        <div className="md:flex gap-4 justify-between items-center border-t border-b border-[#adabfb] pt-2 pb-[12px] drop-shadow">
+          <div className="m-4 md:m-0">
             <input
               type="text"
               id="departureAirport"
@@ -50,7 +66,7 @@ function SearchForm() {
               placeholder="Departure Airport..."
             />
           </div>
-          <div>
+          <div className="m-4 md:m-0">
             <input
               type="text"
               id="destinationAirport"
@@ -60,7 +76,7 @@ function SearchForm() {
               placeholder="Destination Airport"
             />
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 m-4 md:m-0">
             <label
               htmlFor="departureDate"
               className="block text-sm font-medium text-gray-700"
@@ -75,7 +91,7 @@ function SearchForm() {
               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2 border"
             />
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 m-4 md:m-0">
             <label
               htmlFor="returnDate"
               className="block text-sm font-medium text-gray-700"
@@ -90,7 +106,7 @@ function SearchForm() {
               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2 border"
             />
           </div>
-          <div>
+          <div className="ml-24 md:ml-0">
             {passengerTypes.map((passengerType, index) => (
               <div key={index} className="flex gap-2 items-center">
                 <select
@@ -136,12 +152,29 @@ function SearchForm() {
             ))}
           </div>
         </div>
-        <button
-          type="submit"
-          className="mt-4 w-full px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
-        >
-          Search Flights
-        </button>
+        <div className="flex justify-between items-center">
+          <div className="flex gap-2 items-center">
+            <input type="checkbox" />
+            <b className=" text-xs">Extra Options</b>
+          </div>
+          <div className="flex gap-2 items-center">
+            <b className=" text-xs">Environment</b>
+            <div className="flex gap-2">
+              <input type="radio" defaultChecked="checked" />
+              <b className=" text-xs">Dummy</b>
+            </div>
+            <div className="flex gap-2">
+              <input type="radio" />
+              <b className=" text-xs">PDT</b>
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="mt-2 text-sm px-4 py-1 bg-blue-800 text-white rounded hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 font-medium drop-shadow-md"
+          >
+            Search
+          </button>
+        </div>
       </form>
     </>
   );
